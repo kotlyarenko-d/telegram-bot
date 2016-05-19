@@ -21,7 +21,9 @@ module Telegram
 
       # Hash of bots made with bots_config.
       def bots
-        @bots ||= bots_config.transform_values(&Client.method(:wrap))
+        @bots ||= bots_config.each_with_object({}) do |(id, config), h|
+          h[id] = Client.wrap(config, id: id)
+        end
       end
 
       # Default bot.

@@ -10,6 +10,7 @@ module Telegram
 
       autoload :TypedResponse, 'telegram/bot/client/typed_response'
       extend Initializers
+      prepend Async
       include DebugClient
 
       class << self
@@ -33,12 +34,12 @@ module Telegram
 
       attr_reader :client, :token, :username, :base_uri, :botan
 
-      def initialize(token = nil, username = nil, botan: nil, **options)
+      def initialize(token = nil, username = nil, botan: nil, id: nil, **options)
         @client = HTTPClient.new
         @token = token || options[:token]
         @username = username || options[:username]
         @base_uri = format URL_TEMPLATE, token
-        @botan = Botan.new(botan) if botan
+        @botan = Botan.wrap(botan, id: id) if botan
       end
 
       def request(action, body = {}) # rubocop:disable PerceivedComplexity
