@@ -65,6 +65,7 @@ module Telegram
 
       def fetch_updates
         response = bot.get_updates(offset: offset, timeout: timeout)
+        binding.pry
         return unless response['ok'] && response['result'].any?
         reload! do
           response['result'].each do |update|
